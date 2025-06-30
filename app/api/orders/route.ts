@@ -53,6 +53,64 @@ export async function GET(request: Request) {
   }
 }
 
+// export async function POST(request: Request) {
+//   try {
+//     const client = await clientPromise;
+//     const db = client.db("myDatabase");
+//     const body = await request.json();
+
+//     // Handle user orders lookup by phone
+//     if (body.phone) {
+//       const orders = await db.collection("orders").find({ "customer.phone": body.phone }).toArray();
+//       const serializedOrders = orders.map((order) => ({
+//         ...order,
+//         _id: order._id.toString(),
+//       }));
+//       return NextResponse.json({ success: true, orders: serializedOrders });
+//     }
+
+//     // For all orders, create them immediately with appropriate status
+//     const orderData = {
+//       type: body.type,
+//       customer: body.customer,
+//       status: body.type === "custom"
+//         ? "not confirmed"
+//         : (body.status === "confirmed" ? "confirmed" : "payment pending"),
+//       paymentStatus: body.type === "custom"
+//         ? "pending"
+//         : (body.paymentStatus === "paid" ? "paid" : "pending"),
+//       date: new Date(),
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//       ...(body.type === "custom" ? {
+//         occasion: body.occasion,
+//         cakeSize: body.cakeSize,
+//         flavor: body.flavor,
+//         description: body.description,
+//         image: body.image || "",
+//         requiredDate: body.requiredDate,
+//         price: body.price || null,
+//       } : {
+//         items: body.items,
+//         total: body.total,
+//         price: body.price,
+//         finalAmount: body.finalAmount,
+//         discountAmount: body.discountAmount,
+//         coupon: body.coupon
+//       }),
+//     };
+
+//     const result = await db.collection("orders").insertOne(orderData);
+//     return NextResponse.json({
+//       success: true,
+//       orderId: result.insertedId.toString(),
+//       order: { ...orderData, _id: result.insertedId.toString() }
+//     });
+//   } catch (error) {
+//     console.error("Error creating order:", error);
+//     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+//   }
+// }
 export async function POST(request: Request) {
   try {
     const client = await clientPromise;
@@ -70,21 +128,26 @@ export async function POST(request: Request) {
     }
 
     // For all orders, create them immediately with appropriate status
+    const currentDate = new Date();
     const orderData = {
       type: body.type,
       customer: body.customer,
-      status: body.type === "custom" ? "not confirmed" : "payment pending",
-      paymentStatus: "pending",
-      date: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      status: body.type === "custom"
+        ? "not confirmed"
+        : (body.status === "confirmed" ? "confirmed" : "payment pending"),
+      paymentStatus: body.type === "custom"
+        ? "pending"
+        : (body.paymentStatus === "paid" ? "paid" : "pending"),
+      date: currentDate,
+      createdAt: currentDate,
+      updatedAt: currentDate,
+      requiredDate: body.type === "custom" ? body.requiredDate : currentDate, // Set requiredDate to current date for simple orders
       ...(body.type === "custom" ? {
         occasion: body.occasion,
         cakeSize: body.cakeSize,
         flavor: body.flavor,
         description: body.description,
         image: body.image || "",
-        requiredDate: body.requiredDate,
         price: body.price || null,
       } : {
         items: body.items,
@@ -108,6 +171,7 @@ export async function POST(request: Request) {
   }
 }
 
+// In route.ts, modify the PATCH handler:
 export async function PATCH(request: Request) {
   try {
     const client = await clientPromise;
@@ -129,9 +193,14 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // Validate status transition
     const newStatus = "confirmed";
-    if (!isValidStatusTransition(order.status, newStatus)) {
+
+    // For simple orders, always allow confirmation if payment is successful
+    if (order.type === "simple") {
+      // No status validation needed for simple orders when confirming payment
+    }
+    // For custom orders, use the normal validation
+    else if (!isValidStatusTransition(order.status, newStatus)) {
       return NextResponse.json(
         { error: `Invalid status transition from ${order.status} to confirmed` },
         { status: 400 }
@@ -143,7 +212,7 @@ export async function PATCH(request: Request) {
       {
         $set: {
           paymentStatus: "paid",
-          status: newStatus, // Make sure this is being set
+          status: newStatus,
           paymentId: paymentId,
           updatedAt: new Date(),
           paymentMethod: "online",

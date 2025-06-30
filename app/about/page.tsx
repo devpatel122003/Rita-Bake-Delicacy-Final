@@ -16,7 +16,7 @@ export default function AboutPage() {
 
         <div className="relative aspect-video rounded-lg overflow-hidden mb-8 shadow-xl">
           <Image
-            src="/placeholder.svg?height=400&width=800"
+            src="/images/home_page_image.jpg?height=400&width=800"
             alt="Rita's Bakery"
             fill
             className="object-cover"
@@ -26,9 +26,11 @@ export default function AboutPage() {
         <div className="prose max-w-none">
           <h2 className="text-2xl font-bold text-pink-800 mb-4">Our Story</h2>
           <p className="text-gray-700">
-            Founded in 2010, Rita's Bake Delicacy began as a small home-based bakery with a simple mission: to create
-            delicious, handcrafted cakes that bring joy to every celebration. What started as a passion project quickly
-            grew into a beloved local bakery known for exceptional quality and creativity.
+            Hi I'm Rita <br />
+            I am a wife of an understandable husband , mom of two loving child. A hobby baker turned into a bakery owner of “Rita's Bake Delicacy”. As a post graduate by educational qualification, l always wanted to do something and wished to take part in supporting my family. But the almighty has other plans for me. My son, a challenger since birth. So,  I started struggling to manage family with all possible care to bring him up.  During that time, I always put extra efforts to do something for myself, keeping cautious look not to lessen my care and support for my son. When my son grew enough to take care of himself, I made a call for myself. To express my artistic inner-self and spread the happiness among people and to make every occasion and celebration enjoyable, memorable, I become a cake artist.<br />
+            I started my bakery journey with a stall in my residential society in the year end and new-year celebration event. Excellent, lovely, mouth-watering, yammy, exact-sweetness, baked with touch of heart and so many facial and other expressions with heart to heart conversations were the feed backs of that beautiful night which provide me the courage, confidence and paved my way to move forward. After that there was no looking back.<br />
+            Me and my team is dedicated to provide a fresh baked goods to bring sweet smile and excitement in everybody , every-time and in every occasion.<br />
+            My heartfelt gratitude to all my family members, my clients and my friends.<br />
           </p>
 
           <h2 className="text-2xl font-bold text-pink-800 mb-4 mt-8">Our Philosophy</h2>

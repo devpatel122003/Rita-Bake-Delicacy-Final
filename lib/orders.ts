@@ -141,7 +141,13 @@ export async function confirmPayment(
     const res = await fetch("/api/orders", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orderId, paymentId, amount, signature }),
+      body: JSON.stringify({
+        orderId,
+        paymentId,
+        amount,
+        signature,
+        status: "confirmed" // Explicitly set status for simple orders
+      }),
     });
 
     if (!res.ok) {

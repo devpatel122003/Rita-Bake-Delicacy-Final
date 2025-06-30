@@ -58,7 +58,7 @@ export default function ProfilePage() {
           <CardContent className="space-y-4">
             <div className="space-y-1">
               <p className="text-sm font-medium text-gray-500">Email</p>
-              <p>{user.email}</p>
+              <p>{user.isAdmin ? "ritasbakedelicacy@gmail.com" : user.email}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm font-medium text-gray-500">Phone</p>

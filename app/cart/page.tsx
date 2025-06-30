@@ -2,8 +2,8 @@
 
 import { useCart } from "@/components/cart-provider";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Trash2Icon, MinusIcon, PlusIcon, ShoppingBagIcon, ChevronLeftIcon, CheckCircle, XCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Trash2Icon, MinusIcon, PlusIcon, ShoppingBagIcon, ChevronLeftIcon, CheckCircle, XCircle, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Coupon } from "@/types/coupon";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { Separator } from "@/components/ui/separator";
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function CartPage() {
       ? cartSubtotal * (appliedCoupon.discountValue / 100)
       : appliedCoupon.discountValue
     : 0;
-  const finalTotal = cartSubtotal - discountAmount;
+  const finalTotal = Math.max(1, cartSubtotal - discountAmount);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -129,6 +129,7 @@ export default function CartPage() {
         discountValue: appliedCoupon.discountValue,
         discountAmount: discountAmount
       } : undefined,
+      requiredDate: new Date(),
     };
 
     // Generate a temporary order ID
@@ -415,77 +416,87 @@ export default function CartPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <Card className="sticky top-4">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-              {/* Coupon section */}
-              <div className="mb-4">
-                {appliedCoupon ? (
-                  <div className="flex justify-between items-center bg-green-50 p-3 rounded-md mb-3">
-                    <div className="text-green-700 text-sm">
-                      Coupon Applied: {appliedCoupon.code} (-₹{discountAmount.toFixed(2)})
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleRemoveCoupon}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex gap-2 mb-3">
-                    <Input
-                      placeholder="Coupon code"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                      className="flex-1"
-                    />
-                    <Button
-                      variant="outline"
-                      onClick={handleApplyCoupon}
-                      disabled={!couponCode}
-                    >
-                      Apply
-                    </Button>
-                  </div>
-                )}
-                {couponError && (
-                  <p className="text-red-500 text-xs mb-2">{couponError}</p>
-                )}
-              </div>
-
+          <Card className="sticky top-4 shadow-md">
+            <CardHeader className="bg-gradient-to-r from-pink-50 to-white border-b pb-4">
+              <CardTitle className="flex items-center text-pink-700">
+                <ShoppingBag className="mr-2 h-5 w-5" />
+                Order Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-6">
               <div className="space-y-4">
-                <div className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span>₹{cartSubtotal.toFixed(2)}</span>
+
+
+
+                {/* Coupon section - cart-specific */}
+                <div className="mb-4">
+                  {appliedCoupon ? (
+                    <div className="flex justify-between items-center bg-green-50 p-3 rounded-md mb-3">
+                      <div className="text-green-700 text-sm">
+                        Coupon Applied: {appliedCoupon.code} (-₹{discountAmount.toFixed(2)})
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleRemoveCoupon}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2 mb-3">
+                      <Input
+                        placeholder="Coupon code"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        className="flex-1"
+                      />
+                      <Button
+                        variant="outline"
+                        onClick={handleApplyCoupon}
+                        disabled={!couponCode}
+                      >
+                        Apply
+                      </Button>
+                    </div>
+                  )}
+                  {couponError && (
+                    <p className="text-red-500 text-xs mb-2">{couponError}</p>
+                  )}
                 </div>
 
-                {appliedCoupon && (
+                <div className="space-y-4">
                   <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-600">Discount</span>
-                    <span className="text-green-600">-₹{discountAmount.toFixed(2)}</span>
+                    <span className="text-gray-600">Subtotal</span>
+                    <span>₹{cartSubtotal.toFixed(2)}</span>
                   </div>
-                )}
 
-                <div className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Delivery Fee</span>
-                  <span className="text-green-600">Free</span>
+                  {appliedCoupon && (
+                    <div className="flex justify-between py-2 border-b border-gray-100">
+                      <span className="text-gray-600">Discount</span>
+                      <span className="text-green-600">-₹{discountAmount.toFixed(2)}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between py-2 border-b border-gray-100">
+                    <span className="text-gray-600">Delivery Fee</span>
+                    <span className="text-green-600">Free</span>
+                  </div>
+
+                  <div className="flex justify-between py-2 font-bold">
+                    <span>Total</span>
+                    <span>₹{finalTotal.toFixed(2)}</span>
+                  </div>
                 </div>
 
-                <div className="flex justify-between py-2 font-bold">
-                  <span>Total</span>
-                  <span>₹{finalTotal.toFixed(2)}</span>
-                </div>
+                <Button
+                  className="w-full mt-6 bg-pink-600 hover:bg-pink-700"
+                  onClick={handleProceedToCheckout}
+                >
+                  Proceed to Checkout
+                </Button>
               </div>
-
-              <Button
-                className="w-full mt-6 bg-pink-600 hover:bg-pink-700"
-                onClick={handleProceedToCheckout}
-              >
-                Proceed to Checkout
-              </Button>
             </CardContent>
           </Card>
         </div>

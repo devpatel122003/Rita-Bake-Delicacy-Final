@@ -176,11 +176,11 @@ export default function Home() {
                         The Story of Rita's Bake Delicacy
                       </h2>
                       <p className="text-gray-600 mb-6">
-                        Founded with passion and a love for baking, Rita's Bake
-                        Delicacy has been creating memorable sweet experiences
-                        since 2010. Our journey began in a small kitchen and has
-                        grown into a beloved bakery known for exceptional
-                        quality and creativity.
+                        Hi I'm Rita <br />
+                        I am a wife of an understandable husband , mom of two loving child. A hobby baker turned into a bakery owner of “Rita's Bake Delicacy”. As a post graduate by educational qualification, l always wanted to do something and wished to take part in supporting my family. But the almighty has other plans for me. My son, a challenger since birth. So,  I started struggling to manage family with all possible care to bring him up.  During that time, I always put extra efforts to do something for myself, keeping cautious look not to lessen my care and support for my son. When my son grew enough to take care of himself, I made a call for myself. To express my artistic inner-self and spread the happiness among people and to make every occasion and celebration enjoyable, memorable, I become a cake artist.<br />
+                        I started my bakery journey with a stall in my residential society in the year end and new-year celebration event. Excellent, lovely, mouth-watering, yammy, exact-sweetness, baked with touch of heart and so many facial and other expressions with heart to heart conversations were the feed backs of that beautiful night which provide me the courage, confidence and paved my way to move forward. After that there was no looking back.<br />
+                        Me and my team is dedicated to provide a fresh baked goods to bring sweet smile and excitement in everybody , every-time and in every occasion.<br />
+                        My heartfelt gratitude to all my family members, my clients and my friends.<br />
                       </p>
                       <Button
                         asChild
@@ -197,7 +197,7 @@ export default function Home() {
                   >
                     <div className="absolute inset-0 bg-pink-200 flex items-center justify-center">
                       <img
-                        src="/placeholder.svg?height=300&width=500"
+                        src="/images/home_page_image.jpg?height=300&width=500"
                         alt="Rita's Bakery"
                         className="object-cover w-full h-full"
                       />

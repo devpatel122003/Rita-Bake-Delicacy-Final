@@ -213,6 +213,7 @@ export function AdminOrderList() {
               <SelectItem value="preparing">Preparing</SelectItem>
               <SelectItem value="out for delivery">Out for Delivery</SelectItem>
               <SelectItem value="delivered">Delivered</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         </div>
